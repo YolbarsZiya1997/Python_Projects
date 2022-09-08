@@ -16,3 +16,8 @@ if __name__ == '__main__':
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
 
 
+list1 = []
+items_for_the_list = list1.append(input("What do you want: "))
+for items in list1:
+        items.split(", ")
+print(list1)
