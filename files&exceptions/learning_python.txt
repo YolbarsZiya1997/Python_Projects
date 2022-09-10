@@ -1,0 +1,6 @@
+In Python, you can write programs that can read data
+In Python you can write game programs using pygame package
+In Python you can make websites using framework such as Flask and Django
+In Python you can make many interesting project
+In Python you can do interesting data visualization,
+In Python you can analyze data
