@@ -10,7 +10,7 @@ class Cowboy:
         self.screen_rect = bs_game.screen.get_rect()
 
         # Load the cowboy image and get its rectangle
-        self.image = pygame.image.load('cb_image/pixilart-drawing.bmp')
+        self.image = pygame.image.load('/home/ziya/Documents/Python_Projects/do_it_yourself/cb_image/pixilart-drawing.bmp')
         self.rect = self.image.get_rect()
 
         # Start each new ship at the bottom center of the screen
