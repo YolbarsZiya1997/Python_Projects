@@ -29,13 +29,17 @@ class Rocket:
 
     def update(self):
         if self.move_right and self.rect.right < self.screen_rect.right:
-            self.rect.x += self.settings.rocket_speed
+            self.x += self.settings.rocket_speed
         if self.move_left and self.rect.left > 0:
-            self.rect.x -= 1
+            self.x -= 1
         if self.move_up and self.rect.top > 0:
-            self.rect.y -= 1
+            self.y -= 1
         if self.move_down and self.rect.bottom < self.screen_rect.bottom:
-            self.rect.y += 1
+            self.y += 1
+
+        # update the rect
+        self.rect.x = self.x
+        self.rect.y = self.y
 
     def blitme(self):
         """Draw the ship at its current location"""
