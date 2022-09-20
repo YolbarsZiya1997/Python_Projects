@@ -15,7 +15,7 @@ class Rocket:
         self.rect = self.image.get_rect()
 
         # Start each new ship at the bottom center of the screen
-        self.rect.center = self.screen_rect.center
+        self.rect.midbottom = self.screen_rect.midbottom
 
         # store a decimal value for the ships horizontal position
         self.x = float(self.rect.x)
@@ -31,11 +31,11 @@ class Rocket:
         if self.move_right and self.rect.right < self.screen_rect.right:
             self.x += self.settings.rocket_speed
         if self.move_left and self.rect.left > 0:
-            self.x -= 1
+            self.x -= self.settings.rocket_speed
         if self.move_up and self.rect.top > 0:
-            self.y -= 1
+            self.y -= self.settings.rocket_speed
         if self.move_down and self.rect.bottom < self.screen_rect.bottom:
-            self.y += 1
+            self.y += self.settings.rocket_speed
 
         # update the rect
         self.rect.x = self.x
