@@ -91,6 +91,10 @@ class AlienInvasion:
         # can be removed after
         # print(len(self.bullets))
 
+        # Check of any bullets that have hit aliens
+        # If so, get rid of the bullet and the alien
+        self._check_bullet_alien_collisions()
+
     def _create_fleet(self):
         """Create the fleet of aliens."""
         # Create an alien and find the number of aliens in a row
@@ -113,9 +117,9 @@ class AlienInvasion:
     def _create_alien(self, alien_number, row_number):
         alien = Alien(self)
         alien_width, alien_height = alien.rect.size
-        alien.x = alien.rect.width + 2 * alien.rect.width * alien_number
+        alien.x = alien_width + 2 * alien_width * alien_number
         alien.rect.x = alien.x
-        alien.rect.y = alien.rect.height + 2 * alien.rect.height * row_number
+        alien.rect.y = alien_height + 2 * alien_height * row_number
         self.aliens.add(alien)
 
     def _check_fleet_edges(self):
@@ -134,6 +138,18 @@ class AlienInvasion:
         for alien in self.aliens.sprites():
             alien.rect.y += self.settings.drop_speed
         self.settings.fleet_direction *= -1
+
+    def _check_bullet_alien_collisions(self):
+        """Respond to bullet-alien collisions."""
+        # Remove any bullets and aliens that have collided
+        collisions = pygame.sprite.groupcollide(
+            self.bullets, self.aliens, True, True
+        )
+
+        if not self.aliens:
+            # Destroy existing bullets and create new fleet
+            self.bullets.empty()
+            self._create_fleet()
 
 
 if __name__ == '__main__':

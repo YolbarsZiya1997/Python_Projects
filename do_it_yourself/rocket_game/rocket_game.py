@@ -27,6 +27,7 @@ class SpaceShooter:
             self._check_events()
             self.rocket.update()
             self._update_bullets()
+            self._update_aliens()
             self._update_screen()
 
     def _check_events(self):
@@ -71,8 +72,9 @@ class SpaceShooter:
         pygame.display.flip()
 
     def _fire_bullet(self):
-        bullet = Bullet(self)
-        self.bullets.add(bullet)
+        if len(self.bullets) < self.settings.bullets_allowed:
+            new_bullet = Bullet(self)
+            self.bullets.add(new_bullet)
 
     def _update_bullets(self):
         self.bullets.update()
@@ -80,6 +82,12 @@ class SpaceShooter:
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
+
+        # Check for any bullets that have hit aliens.
+        # If so, get rid of the bullet and the alien
+        collisions = pygame.sprite.groupcollide(
+            self.bullets, self.aliens, True, True
+        )
 
     def _create_fleet(self):
         """Create the fleet of aliens"""
@@ -108,6 +116,23 @@ class SpaceShooter:
         alien.rect.x += randint(-200, 200)
         alien.rect.y += randint(-200, 200)
         self.aliens.add(alien)
+
+    def _update_aliens(self):
+        """Update the position of all aliens in the fleet"""
+        self._check_fleet_edges()
+        self.aliens.update()
+
+    def _check_fleet_edges(self):
+        for alien in self.aliens.sprites():
+            if alien.check_edges():
+                self._change_fleet_direction()
+                break
+
+    def _change_fleet_direction(self):
+        """Drop the entire fleet and change the fleet's direction"""
+        for alien in self.aliens.sprites():
+            alien.rect.y += self.settings.drop_speed
+        self.settings.fleet_direction *= -1
 
 
 if __name__ == '__main__':
