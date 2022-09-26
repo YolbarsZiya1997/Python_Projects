@@ -1,8 +1,10 @@
 import pygame
 import sys
+from random import random
 from ss_settings import Settings
 from gunman_setup import GunMan
 from bullet_setup import Bullet
+from indian import Indians
 
 
 class SidewaysShooter:
@@ -16,6 +18,8 @@ class SidewaysShooter:
         )
         self.gunman = GunMan(self)
         self.bullets = pygame.sprite.Group()
+        self.indians = pygame.sprite.Group()
+        self._create_horde()
         pygame.display.set_caption('Sideways Shooter')
 
     def run_game(self):
@@ -39,6 +43,7 @@ class SidewaysShooter:
         self.gunman.blitme()
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
+        self.indians.draw(self.screen)
         pygame.display.update()
 
     def _check_keydown_events(self, event):
@@ -69,7 +74,13 @@ class SidewaysShooter:
         for bullet in self.bullets.copy():
             if bullet.rect.left >= self.screen.get_rect().right:
                 self.bullets.remove(bullet)
-        print(len(self.bullets))
+
+    def _create_horde(self):
+        """Create the hord of indians, if conditions are right."""
+        if random() < self.settings.indian_frequency:
+            indian = Indians(self)
+            self.indians.add(indian)
+            print(len(self.indians))
 
 
 if __name__ == '__main__':
