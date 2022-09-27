@@ -1,14 +1,17 @@
 import pygame
 import sys
+from time import sleep
 from random import random
 from ss_settings import Settings
 from gunman_setup import GunMan
 from bullet_setup import Bullet
+from ss_game_stats import GameStats
 from indian import Indians
 
 
 class SidewaysShooter:
     """Main class for the game"""
+
     def __init__(self):
         """Initialize the game, and set up game resources"""
         pygame.init()
@@ -16,17 +19,23 @@ class SidewaysShooter:
         self.screen = pygame.display.set_mode(
             (self.settings.screen_width, self.settings.screen_height)
         )
+        self.stats = GameStats(self)
         self.gunman = GunMan(self)
         self.bullets = pygame.sprite.Group()
         self.indians = pygame.sprite.Group()
-        self._create_horde()
+
         pygame.display.set_caption('Sideways Shooter')
 
     def run_game(self):
         while True:
             self._check_events()
-            self.gunman.update()
-            self._update_bullets()
+            # Consider creating a new indian
+            if self.stats.game_active:
+                self._create_horde()
+
+                self._update_indians()
+                self.gunman.update()
+                self._update_bullets()
             self._update_screen()
 
     def _check_events(self):
@@ -75,12 +84,57 @@ class SidewaysShooter:
             if bullet.rect.left >= self.screen.get_rect().right:
                 self.bullets.remove(bullet)
 
+        self._check_bullet_alien_collisions()
+
     def _create_horde(self):
         """Create the hord of indians, if conditions are right."""
         if random() < self.settings.indian_frequency:
             indian = Indians(self)
             self.indians.add(indian)
             print(len(self.indians))
+
+    def _check_bullet_alien_collisions(self):
+        """check whether any bullets have hit an alien."""
+        collisions = pygame.sprite.groupcollide(
+            self.bullets, self.indians, True, True
+        )
+
+    def _update_indians(self):
+        self.indians.update()
+
+        # Look for collision between the gunman and the indians
+        if pygame.sprite.spritecollideany(self.gunman, self.indians):
+            self._man_down()
+
+        # Check for the trespassing indians
+        self._check_indian_trespass()
+
+    def _man_down(self):
+        """Respond to gunman being hit by an indian"""
+        if self.settings.number_of_gunman > 0:
+            self.settings.number_of_gunman -= 1
+
+            # empty the list of indians and bullets
+            self.indians.empty()
+            self.bullets.empty()
+
+            # make new instances of indians and recenter the ship
+            self._update_indians()
+            self.gunman.recenter()
+
+            # Pause the game
+            sleep(0.7)
+
+        else:
+            self.stats.game_active = False
+
+    def _check_indian_trespass(self):
+        """Check if any indians have crossed the right side of the screen"""
+        screen_rect = self.screen.get_rect()
+        for indian in self.indians.sprites():
+            if indian.rect.left <= screen_rect.left:
+                self._man_down()
+                break
 
 
 if __name__ == '__main__':

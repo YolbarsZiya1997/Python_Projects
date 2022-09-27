@@ -19,10 +19,15 @@ class Indians(Sprite):
         # Start each alien near the top right of the screen
         self.rect.left = self.screen_rect.right
         indian_top_max = self.settings.screen_height - self.rect.height
-        self.rect_top = randint(0, indian_top_max)
+        self.rect.top = randint(self.rect.height, indian_top_max - self.rect.height)
 
         # Store the Indian's exact horizontal location
         self.x = float(self.rect.x)
+
+    def check_edges(self):
+        """Return True if indian is at the edge of screen"""
+        if self.rect.top <= 0 or self.rect.bottom >= self.screen_rect.bottom:
+            return True
 
     def update(self):
         """Move the indian steadily to the left"""
