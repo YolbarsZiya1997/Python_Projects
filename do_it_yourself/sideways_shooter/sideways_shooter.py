@@ -19,6 +19,10 @@ class SidewaysShooter:
         self.screen = pygame.display.set_mode(
             (self.settings.screen_width, self.settings.screen_height)
         )
+        self.make_bullet = False
+        self.last_fired_bullet = 0
+        self.firing_delay = 100
+
         self.stats = GameStats(self)
         self.gunman = GunMan(self)
         self.bullets = pygame.sprite.Group()
@@ -35,6 +39,7 @@ class SidewaysShooter:
 
                 self._update_indians()
                 self.gunman.update()
+                self.make_bullets()
                 self._update_bullets()
             self._update_screen()
 
@@ -61,7 +66,7 @@ class SidewaysShooter:
         elif event.key == pygame.K_DOWN:
             self.gunman.move_down = True
         elif event.key == pygame.K_SPACE:
-            self.__fire_bullet()
+            self.make_bullet = True
         elif event.key == pygame.K_q:
             sys.exit()
 
@@ -70,6 +75,8 @@ class SidewaysShooter:
             self.gunman.move_up = False
         elif event.key == pygame.K_DOWN:
             self.gunman.move_down = False
+        elif event.key == pygame.K_SPACE:
+            self.make_bullet = False
 
     def __fire_bullet(self):
         """Create a new bullet and add it to the bullets group"""
@@ -135,6 +142,9 @@ class SidewaysShooter:
             if indian.rect.left <= screen_rect.left:
                 self._man_down()
                 break
+
+    def make_bullets(self):
+
 
 
 if __name__ == '__main__':
