@@ -143,7 +143,7 @@ class SidewaysShooter:
                 self._man_down()
                 break
 
-    def make_bullets(self):
+
 
 
 
