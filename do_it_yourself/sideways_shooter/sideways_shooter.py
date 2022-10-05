@@ -36,10 +36,10 @@ class SidewaysShooter:
             # Consider creating a new indian
             if self.stats.game_active:
                 self._create_horde()
-
                 self._update_indians()
                 self.gunman.update()
-                self.make_bullets()
+                if pygame.time.get_ticks() -self.last_fired_bullet >= self.firing_delay:
+                    self._make_bullets()
                 self._update_bullets()
             self._update_screen()
 
@@ -78,11 +78,11 @@ class SidewaysShooter:
         elif event.key == pygame.K_SPACE:
             self.make_bullet = False
 
-    def __fire_bullet(self):
-        """Create a new bullet and add it to the bullets group"""
-        if len(self.bullets) < self.settings.bullet_allowed:
+    def _make_bullets(self):
+        if self.make_bullet:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
+            self.last_fired_bullet = pygame.time.get_ticks()
 
     def _update_bullets(self):
         self.bullets.update()
@@ -142,9 +142,6 @@ class SidewaysShooter:
             if indian.rect.left <= screen_rect.left:
                 self._man_down()
                 break
-
-
-
 
 
 if __name__ == '__main__':
