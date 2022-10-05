@@ -69,6 +69,8 @@ class TargetPractice:
         # reset the game statistics.
         button_clicked = self.button.rect.collidepoint(mouse_pos)
         if button_clicked and not self.stats.game_active:
+            # Reset the game settings.
+            self.settings.initialize_dynamic_settings()
             self.stats.reset_stats()
             self.stats.game_active = True
 
@@ -116,6 +118,7 @@ class TargetPractice:
         if not self.targets:
             # Create new target.
             self._create_targets()
+            self.settings.increase_speed()
 
     def _create_targets(self):
         """Create a target"""
