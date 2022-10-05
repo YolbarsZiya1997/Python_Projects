@@ -29,6 +29,11 @@ class SpaceShip:
 
         self.rect.y = self.y
 
+    def center_ship(self):
+        """center the ship on the midright screen."""
+        self.rect.midleft = self.screen.get_rect().midleft
+        self.y = float(self.rect.y)
+
     def blitme(self):
         """Draw the ship at its current location."""
         self.screen.blit(self.image, self.rect)
