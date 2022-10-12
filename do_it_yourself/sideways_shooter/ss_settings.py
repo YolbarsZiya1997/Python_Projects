@@ -4,7 +4,7 @@ import pygame
 class Settings:
     """The settings class for the sideways shooter game"""
     def __init__(self):
-        """Main settings"""
+        """Initialize the game's static settings."""
         self.screen_width = 1200
         self.screen_height = 800
         self.bg_color = (30, 20, 10)
@@ -25,3 +25,6 @@ class Settings:
         self.bullet_height = 7
         self.bullet_color = (255, 255, 255)
         self.bullet_speed = 2.5
+
+        # Scoring
+        self.indian_points = 10

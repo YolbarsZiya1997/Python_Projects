@@ -1,9 +1,12 @@
 import pygame
+from pygame.sprite import Sprite
 
 
-class GunMan:
+class GunMan(Sprite):
     """Basic setup for the gunman class"""
     def __init__(self, ss_game):
+        """Initialize the gunman and set its attributes."""
+        super().__init__()
         self.screen = ss_game.screen
         self.settings = ss_game.settings
         self.screen_rect = ss_game.screen.get_rect()
